@@ -7,6 +7,7 @@ package com.example.bakery.controllers;
 
 
 import com.example.bakery.repository.AdminRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,23 +25,38 @@ public class AdminController {
         return "adminlogin"; // WITHOUT .html
     }
         @PostMapping("/adminlogin")
-    public String login(@RequestParam String name,
-                        @RequestParam String password,
-                        Model model) {
+public String login(@RequestParam String name,
+                    @RequestParam String password,
+                    HttpSession session,
+                    Model model) {
 
-        var admin = adminRepository.findByNameAndPassword(name, password);
+    var admin = adminRepository.findByNameAndPassword(name, password);
 
-        if (admin.isPresent()) {
-            return "redirect:/adminhome";
-        } else {
-            model.addAttribute("error", "Invalid credentials");
-            return "adminlogin";
-        }
+    if (admin.isPresent()) {
+        session.setAttribute("adminName", name);
+        return "redirect:/adminhome";
+    } else {
+        model.addAttribute("error", "Invalid username or password");
+        return "adminlogin";
     }
+}
+
 
     @GetMapping("/adminhome")
-    public String adminHome() {
-        return "adminhome";
+public String adminHome(HttpSession session, Model model) {
+
+    String adminName = (String) session.getAttribute("adminName");
+
+    if (adminName == null) {
+        return "redirect:/adminlogin";
     }
 
+    model.addAttribute("adminName", adminName);
+    return "adminhome";
+}
+@GetMapping("/logout")
+public String logout(HttpSession session) {
+    session.invalidate();   // destroy session
+    return "redirect:/adminlogin";
+}
 }
