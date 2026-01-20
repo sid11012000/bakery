@@ -30,6 +30,9 @@ private Category category;
 private SubCategory subCategory;
     @Column(nullable = false)
     private String itemName;
+    
+    @Column(nullable = true)
+private String imageName;
     // getters & setters
 
     public Long getId() {
@@ -64,6 +67,12 @@ private SubCategory subCategory;
     public void setSubCategory(SubCategory subCategory) {
         this.subCategory = subCategory;
     }
-    
+    public String getImageName() {
+    return imageName;
+}
+
+public void setImageName(String imageName) {
+    this.imageName = imageName;
+}
     
 }

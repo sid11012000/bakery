@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.*;
+import java.io.IOException;
 @Controller
 @RequestMapping("/admin/items")
 public class CategoryItemController {
@@ -45,6 +48,7 @@ public String list(@RequestParam(value = "keyword", required = false) String key
     } else {
         items = repo.findAll();
     }
+    model.addAttribute("adminName", session.getAttribute("adminName"));
 
     model.addAttribute("items", items);
     return "item-list";
@@ -64,7 +68,8 @@ public String list(@RequestParam(value = "keyword", required = false) String key
 public String save(@RequestParam(required = false) Long id,
                    @RequestParam Long categoryId,
                    @RequestParam(required = false) Long subCategoryId,
-                   @RequestParam String itemName) {
+                   @RequestParam String itemName,
+                   @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
     CategoryItem item = (id != null)
             ? repo.findById(id).orElse(new CategoryItem())
@@ -82,6 +87,19 @@ public String save(@RequestParam(required = false) Long id,
         item.setSubCategory(null);
     }
 
+    // 隼 IMAGE SAVING LOGIC
+    if (!imageFile.isEmpty()) {
+        String fileName = imageFile.getOriginalFilename();
+        
+        // Save to specific folder (Change this path if needed)
+        Path fileNameAndPath = Paths.get("src/main/resources/static/images", fileName);
+        
+        // Actually write the file to disk
+        Files.write(fileNameAndPath, imageFile.getBytes());
+        
+        // Save the filename in database
+        item.setImageName(fileName);
+    }
     repo.save(item);
     return "redirect:/admin/items";
 }
@@ -108,5 +126,23 @@ public String edit(@PathVariable Long id, Model model) {
     @ResponseBody
     public List<SubCategory> subByCategory(@PathVariable Long id) {
         return subCategoryRepo.findByCategoryId(id);
+    }
+    
+    /* =====================================================
+       ================= USER SIDE (NEW) ===================
+       ===================================================== */
+
+    @GetMapping("/category/{id}")
+    public String userCategoryItems(@PathVariable Long id, Model model) {
+
+        model.addAttribute("categories", categoryRepo.findAll());
+
+        Category category = categoryRepo.findById(id).orElseThrow();
+        model.addAttribute("selectedCategory", category);
+
+        model.addAttribute("items",
+                repo.findByCategoryId(id));
+
+        return "index";
     }
 }

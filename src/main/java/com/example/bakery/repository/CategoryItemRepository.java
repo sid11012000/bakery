@@ -14,4 +14,5 @@ public interface CategoryItemRepository extends JpaRepository<CategoryItem, Long
            OR lower(c.itemName) LIKE lower(concat('%', :keyword, '%'))
     """)
     List<CategoryItem> search(@Param("keyword") String keyword);
+    List<CategoryItem> findByCategoryId(Long categoryId);
 }

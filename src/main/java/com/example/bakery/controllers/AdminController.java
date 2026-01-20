@@ -7,6 +7,9 @@ package com.example.bakery.controllers;
 
 
 import com.example.bakery.repository.AdminRepository;
+import com.example.bakery.repository.CategoryItemRepository;
+import com.example.bakery.repository.CategoryRepository;
+import com.example.bakery.repository.SubCategoryRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AdminController {
 
+    @Autowired private CategoryRepository categoryRepo;
+    @Autowired private SubCategoryRepository subCategoryRepo;
+    @Autowired private CategoryItemRepository itemRepo;
     @Autowired
     private AdminRepository adminRepository;
     @GetMapping("/adminlogin")
@@ -50,7 +56,10 @@ public String adminHome(HttpSession session, Model model) {
     if (adminName == null) {
         return "redirect:/adminlogin";
     }
-
+ 
+    model.addAttribute("categoryCount", categoryRepo.count());
+        model.addAttribute("subCategoryCount", subCategoryRepo.count());
+        model.addAttribute("itemCount", itemRepo.count());
     model.addAttribute("adminName", adminName);
     return "adminhome";
 }

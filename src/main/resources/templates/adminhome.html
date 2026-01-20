@@ -132,15 +132,17 @@
                             Manage your cake categories, track recent orders, and keep your bakery running perfectly fresh.
                         </p>
                         <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="stat-pill bg-soft-pink">
-                                Today’s Orders: <strong>18</strong>
-                            </span>
-                            <span class="stat-pill bg-soft-yellow">
-                                Pending: <strong>5</strong>
-                            </span>
                             <span class="stat-pill bg-soft-purple">
-                                Categories: <strong>12</strong>
-                            </span>
+                            Categories: <strong th:text="${categoryCount}">0</strong>
+                        </span>
+
+                        <span class="stat-pill bg-soft-yellow">
+                            Sub-Categories: <strong th:text="${subCategoryCount}">0</strong>
+                        </span>
+
+                        <span class="stat-pill bg-soft-pink">
+                            Items: <strong th:text="${itemCount}">0</strong>
+                        </span>
                         </div>
                         <small class="text-muted">
                             Tip: Keep categories updated so customers can easily find seasonal cakes and specials.
@@ -174,7 +176,7 @@
                                 <li>Edit descriptions and images.</li>
                                 <li>Reorder categories for the homepage.</li>
                             </ul>
-                            <a href="#manage-categories" class="btn btn-primary w-100"
+                            <a href="/admin/items" class="btn btn-primary w-100"
                                style="background-color:#7b2cbf;border-color:#7b2cbf;">
                                 Go to Manage Categories
                             </a>
