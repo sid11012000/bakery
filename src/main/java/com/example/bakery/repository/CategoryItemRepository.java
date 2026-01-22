@@ -9,10 +9,14 @@ import org.springframework.data.repository.query.Param;
 public interface CategoryItemRepository extends JpaRepository<CategoryItem, Long> {
 @Query("""
         SELECT c FROM CategoryItem c
-        WHERE lower(c.category) LIKE lower(concat('%', :keyword, '%'))
-           OR lower(c.subCategory) LIKE lower(concat('%', :keyword, '%'))
+        LEFT JOIN c.category cat
+        LEFT JOIN c.subCategory sub
+        WHERE lower(cat.name) LIKE lower(concat('%', :keyword, '%'))
+           OR lower(sub.name) LIKE lower(concat('%', :keyword, '%'))
            OR lower(c.itemName) LIKE lower(concat('%', :keyword, '%'))
     """)
     List<CategoryItem> search(@Param("keyword") String keyword);
+
     List<CategoryItem> findByCategoryId(Long categoryId);
+    
 }

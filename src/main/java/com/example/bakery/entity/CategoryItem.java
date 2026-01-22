@@ -20,6 +20,11 @@ public class CategoryItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = true)
+private Double price;
+
+@Column(nullable = true)
+private String quantity;
 
     @ManyToOne
 @JoinColumn(name = "category_id")
@@ -74,5 +79,10 @@ private String imageName;
 public void setImageName(String imageName) {
     this.imageName = imageName;
 }
+public Double getPrice() { return price; }
+public void setPrice(Double price) { this.price = price; }
+
+public String getQuantity() { return quantity; }
+public void setQuantity(String quantity) { this.quantity = quantity; }
     
 }

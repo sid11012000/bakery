@@ -69,6 +69,8 @@ public String save(@RequestParam(required = false) Long id,
                    @RequestParam Long categoryId,
                    @RequestParam(required = false) Long subCategoryId,
                    @RequestParam String itemName,
+                   @RequestParam(required = false) Double price,   
+                   @RequestParam(required = false) String quantity,
                    @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
     CategoryItem item = (id != null)
@@ -76,7 +78,8 @@ public String save(@RequestParam(required = false) Long id,
             : new CategoryItem();
 
     item.setItemName(itemName);
-
+    item.setPrice(price);       
+    item.setQuantity(quantity);
     Category category = categoryRepo.findById(categoryId).orElseThrow();
     item.setCategory(category);
 
