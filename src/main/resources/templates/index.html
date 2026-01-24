@@ -104,6 +104,13 @@
            title="Follow us on Instagram">
             <i class="fa-brands fa-instagram"></i>
         </a>
+        <a th:href="@{/cart}" class="btn btn-outline-dark position-relative">
+    🛒 Cart
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+          th:text="${cartCount}">
+        0
+    </span>
+</a>
 
         <div class="ms-auto d-flex align-items-center gap-2">
             <span class="fw-semibold text-muted" style="font-size: 0.9rem;">
@@ -234,7 +241,11 @@
                                     <input type="text" class="form-control text-center px-0 qty" value="1" readonly style="background:white;">
                                     <button class="btn btn-outline-secondary px-2" type="button" onclick="changeQty(this, 1)">+</button>
                                 </div>
-                                <button class="btn btn-dark btn-sm flex-grow-1" onclick="addToCart(this)">Add +</button>
+                                <button class="btn btn-dark btn-sm flex-grow-1" 
+        th:attr="data-id=${item.id}" 
+        onclick="addToCart(this)">
+    Add +
+</button>
                             </div>
                         </div>
                      </div>
@@ -288,7 +299,11 @@
                                 <input type="text" class="form-control text-center px-0 qty" value="1" readonly style="background:white;">
                                 <button class="btn btn-outline-secondary px-2" type="button" onclick="changeQty(this, 1)">+</button>
                             </div>
-                            <button class="btn btn-dark btn-sm flex-grow-1" onclick="addToCart(this)">Add +</button>
+                            <button class="btn btn-dark btn-sm flex-grow-1" 
+        th:attr="data-id=${item.id}" 
+        onclick="addToCart(this)">
+    Add +
+</button>
                         </div>
                     </div>
                  </div>
@@ -334,15 +349,17 @@ function scrollToCategory(id) {
 
     // Handles Add to Cart
     function addToCart(btn) {
-        // Find the card container to get details
-        const card = btn.closest('.card');
-        const itemName = card.querySelector('.card-title').innerText;
-        const quantity = card.querySelector('.qty').value;
-
-        // For now, just show an alert
-        alert(`Added to cart:\n${itemName} (x${quantity})`);
+        // 1. Get the Item ID (we just added this data-id attribute)
+        const itemId = btn.getAttribute("data-id");
         
-        // Later you can send this data to your backend via fetch()
+        // 2. Get the Quantity from the input next to the button
+        const card = btn.closest('.card-body');
+        const qtyInput = card.querySelector('.qty');
+        const quantity = qtyInput.value;
+
+        // 3. Send to Server (Redirect)
+        // URL will look like: /cart/add/5/2 (Item 5, Qty 2)
+        window.location.href = `/cart/add/${itemId}/${quantity}`;
     }
 </script>
 

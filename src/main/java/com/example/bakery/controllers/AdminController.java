@@ -9,6 +9,7 @@ package com.example.bakery.controllers;
 import com.example.bakery.repository.AdminRepository;
 import com.example.bakery.repository.CategoryItemRepository;
 import com.example.bakery.repository.CategoryRepository;
+import com.example.bakery.repository.ShopOrderRepository;
 import com.example.bakery.repository.SubCategoryRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class AdminController {
     @Autowired private CategoryItemRepository itemRepo;
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired ShopOrderRepository orderRepo;
     @GetMapping("/adminlogin")
     public String adminLogin() {
         return "adminlogin"; // WITHOUT .html
@@ -63,6 +65,11 @@ public String adminHome(HttpSession session, Model model) {
     model.addAttribute("adminName", adminName);
     return "adminhome";
 }
+@GetMapping("/admin/orders")
+    public String viewOrders(Model model) {
+        model.addAttribute("orders", orderRepo.findAllByOrderByOrderDateDesc());
+        return "adminOrders"; // We will create this HTML file next
+    }
 @GetMapping("/logout")
 public String logout(HttpSession session) {
     session.invalidate();   // destroy session

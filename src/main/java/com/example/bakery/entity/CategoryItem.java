@@ -84,5 +84,14 @@ public void setPrice(Double price) { this.price = price; }
 
 public String getQuantity() { return quantity; }
 public void setQuantity(String quantity) { this.quantity = quantity; }
+
+public Double getTotal() {
+        try {
+            // Converts string quantity ("2") to double (2.0) and multiplies by price
+            return this.price * Double.parseDouble(this.quantity);
+        } catch (Exception e) {
+            return 0.0; // Safety: return 0 if quantity is "1 kg" or invalid text
+        }
+    }
     
 }

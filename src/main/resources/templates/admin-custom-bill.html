@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Custom Bill</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-primary mb-4">
+    <div class="container">
+        <span class="navbar-brand">🧾 Custom Bill Maker</span>
+        <a th:href="@{/adminhome}" class="btn btn-light btn-sm">Back to Dashboard</a>
+    </div>
+</nav>
+
+<div class="container" style="max-width: 800px;">
+    <div class="card shadow">
+        <div class="card-body">
+            <h4 class="mb-4">Customer Details</h4>
+            
+            <form action="/admin/generate-custom-bill" method="post">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label>Customer Name</label>
+                        <input type="text" name="customerName" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Phone Number</label>
+                        <input type="text" name="phoneNumber" class="form-control" required>
+                    </div>
+                </div>
+
+                <h4 class="mb-3">Items List</h4>
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Item Name</th>
+                            <th style="width: 150px;">Price ($)</th>
+                            <th style="width: 100px;">Qty</th>
+                            <th style="width: 50px;">❌</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsBody">
+                        <tr>
+                            <td><input type="text" name="itemNames" class="form-control" required placeholder="e.g. Special Cake"></td>
+                            <td><input type="number" step="0.01" name="itemPrices" class="form-control" required placeholder="0.00"></td>
+                            <td><input type="number" name="itemQuantities" class="form-control" value="1" required></td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-secondary mb-4" onclick="addRow()">+ Add Another Item</button>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-lg">Generate & Download Bill 📄</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function addRow() {
+        const tbody = document.getElementById('itemsBody');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><input type="text" name="itemNames" class="form-control" required></td>
+            <td><input type="number" step="0.01" name="itemPrices" class="form-control" required></td>
+            <td><input type="number" name="itemQuantities" class="form-control" value="1" required></td>
+            <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
+        `;
+        tbody.appendChild(row);
+    }
+
+    function removeRow(btn) {
+        const row = btn.parentNode.parentNode;
+        // Don't delete the last remaining row
+        if(document.querySelectorAll('#itemsBody tr').length > 1) {
+            row.remove();
+        }
+    }
+</script>
+
+</body>
+</html>

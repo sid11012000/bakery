@@ -203,7 +203,7 @@
                                 <li>Update order status and payment.</li>
                                 <li>Filter by delivery date or category.</li>
                             </ul>
-                            <a href="#view-orders" class="btn btn-outline-primary w-100"
+                            <a th:href="@{/admin/orders}" class="btn btn-outline-primary w-100"
                                style="border-color:#7b2cbf;color:#7b2cbf;">
                                 Go to View Orders
                             </a>
@@ -282,10 +282,9 @@
                             <small class="text-muted">Order #C-1034 • Yesterday</small>
                         </div>
                     </div>
-                    <a href="#view-orders" class="small text-decoration-none"
-                       style="color:#7b2cbf;">
-                        View all orders →
-                    </a>
+                    <a th:href="@{/admin/orders}" class="btn btn-warning btn-lg mb-3">
+    📦 View Customer Orders
+</a>
                 </div>
             </div>
 
@@ -301,9 +300,9 @@
     Add New Cake Item
 </button>
 
-                        <button class="btn btn-sm btn-outline-secondary">
-                            Add Limited-time Offer
-                        </button>
+                        <a th:href="@{/admin/custom-bill}" class="btn btn-sm btn-outline-secondary">
+        📝 Create Custom Bill
+    </a>
                         <button class="btn btn-sm btn-outline-secondary">
                             View Customer Feedback
                         </button>
